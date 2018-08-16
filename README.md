@@ -1,2 +1,0 @@
-# Rozalado
-Created with CodeSandbox
