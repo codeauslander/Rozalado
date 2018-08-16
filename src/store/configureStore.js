@@ -1,14 +1,19 @@
-import { createStore, combineReducers } from "redux";
-import tasksReducer from "../reducers/tasks";
-import filtersReducer from "../reducers/filters";
+import React from 'react';
+import { createStore, applyMiddleware } from 'redux';
 
-export default () => {
+import thunk from 'redux-thunk';
+// import { composeWithDevTools } from 'redux-devtools-extension';
+
+import reducers, { tasks } from '../reducers/tasks';
+
+import { Provider } from 'react-redux';
+
+export default ({ children, initialState = {} }) => {
   const store = createStore(
-    combineReducers({
-      expenses: tasksReducer,
-      filters: filtersReducer
-    })
+    tasks,
+    initialState,
+    // composeWithDevTools(applyMiddleware(thunk))
+    applyMiddleware(thunk)
   );
-
-  return store;
-};
+  return <Provider store={store}>{children}</Provider>;
+}

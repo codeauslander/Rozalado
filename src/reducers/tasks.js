@@ -1,25 +1,53 @@
-const tasksReducerDefaultState = [];
+import { combineReducers } from 'redux';
 
-export default (state = tasksReducerDefaultState, action) => {
-  switch (action.type) {
-    case "FETCH_TASKS":
-      return fetch(action.tasksUrl).then(response => response.json());
-    case "ADD_TASK":
-      return [...state, action.task];
-    case "REMOVE_TASK":
-      return state.filter(({ _id }) => _id !== action._id);
-    case "EDIT_TASK":
-      return state.map(task => {
-        if (task._id === action._id) {
-          return {
-            ...task,
-            ...action.updates
-          };
-        } else {
-          return task;
-        }
-      });
-    default:
-      return state;
-  }
+const initialState = {
+  tasks: [],
+  loading: false,
+  error: null,
+  text: "",
+  sortBy: "amount"
 };
+
+export const tasks = (state = initialState, action) => {
+  switch (action.type) {
+    case 'FETCH_TASKS': {
+      return {
+        ...state,
+        loading: true
+      };
+    };
+    case 'FETCH_TASKS_SUCCESS': {
+      return {
+        ...state,
+        tasks: action.payload,
+        loading: false,
+        error: null
+      };
+    };
+    case 'FETCH_TASKS_FAIL': {
+      return {
+        ...state,
+        tasks: [],
+        loading: false,
+        error: action.payload
+      };
+    };
+    case "SET_TEXT_FILTER":{
+      return {
+        ...state,
+        text: action.text
+      };
+    };
+    case "SORT_BY_AMOUNT":{
+      return {
+        ...state,
+        sortBy: "amount"
+      };
+    };
+    default: {
+      return state;
+    };
+  };
+};
+
+export default combineReducers({ tasks });

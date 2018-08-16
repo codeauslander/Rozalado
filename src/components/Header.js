@@ -4,13 +4,14 @@ import styled from "styled-components";
 
 const StyledHeader = styled.header`
 	align-items: center;
-	background-color: #1fcbe2;
+	background-color: #3399ff;
 	color: #ffffff;
 	display: flex;
 	flex-flow: row nowrap;
 	justify-content: space-between;
 	padding: 1rem;
 	width: 100%;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
 `;
 
 const StyledTitle = styled.h1`
@@ -30,12 +31,9 @@ const StyleUrl = styled.a`
 	text-decoration: none;
 `;
 
-// const placeholder = moment().format("MMM Do YY");
-const placeholder = moment()
-  .add(7, "days")
-  .calendar();
+const placeholder = moment().format("MMM Do YY");
 
-export default ({ title, date, url }) => (
+export default ({ title, date, github, url }) => (
   <StyledHeader>
     <StyledTitle>
       {title} <StyleUrl href={url}>{url}</StyleUrl>

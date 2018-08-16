@@ -6,6 +6,7 @@ const StyledGuidelines = styled.div`
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
 	margin-bottom: 2rem;
 	padding: 1rem;
+  background-color: #99ccff;
 `;
 
 const StyledInstructions = styled.p`
