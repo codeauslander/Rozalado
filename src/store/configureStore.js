@@ -3,7 +3,6 @@ import { createStore, applyMiddleware } from 'redux';
 
 import thunk from 'redux-thunk';
 
-
 import reducers, { tasks } from '../reducers/tasks';
 
 import { Provider } from 'react-redux';
