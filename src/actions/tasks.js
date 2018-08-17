@@ -9,7 +9,7 @@ export const fetchTasks = () => async dispatch => {
   });
 
   let response = await axios.get(tasksUrl);
-  if (response.status < 400) {
+  if (response.status === 200) {
     return dispatch(fetchTasksSuccess(response.data));
   } else {
     return dispatch(fetchTasksFail(response.error));
@@ -26,29 +26,32 @@ export const fetchTasksFail = error => ({
   payload: error
 });
 
-export const filterSortTasks =  (tasks, text, sortBy = 'id') => (dispatch) => {
+export const filterSortTasks =  (tasks, text, sortBy) => (dispatch) => {
   dispatch({
     type: 'FILTER_SORT_TASKS'
   });
-  // console.log(tasks,text,sortBy);
 
   let list = tasks.filter(task => {
-    let textMatch = false;
-    if (typeof task.task === 'string') {
-      textMatch = task.task.toLowerCase().includes(text.toLowerCase());
-      // console.log(textMatch);
-    }else if (task.task instanceof Array || task.task instanceof Object){
-      textMatch = true;
-    }
-    return textMatch;
-  })
-  .sort((a, b) => {
-    if (sortBy === "id") {
-      let result = a.task._id < b.task._id ? -1 : 1;
-      return result;
-    }
-  });
-  console.log(list)
+      let object = task.task
+      let textMatch = false;
+      if (typeof object === 'string') {
+        textMatch = object.toLowerCase().includes(text.toLowerCase());
+      } else if (typeof object === 'number'){
+        textMatch = `${object}`.toLowerCase().includes(text.toLowerCase());
+      } else if (object instanceof Object || object instanceof Array){
+        textMatch = JSON.stringify(object).toLowerCase().includes(text.toLowerCase());
+      }
+      return textMatch;
+    }).sort((a, b) => {
+      if (sortBy === 'on') {
+         console.log(sortBy);
+        return a._id > b._id ? -1 : 1;
+      } else {
+         console.log(sortBy);
+        return a._id < b._id ? -1 : 1;
+      }
+    });
+
   return dispatch(setTextFilter(list));
 };
 
@@ -58,6 +61,6 @@ export const setTextFilter = (tasks) => ({
   payload: tasks
 });
 
-export const sortById = () => ({
-  type: "SORT_BY_ID"
-});
+// export const sortById = () => ({
+//   type: "SORT_BY_ID"
+// });

@@ -27,7 +27,7 @@ const Button = styled.button`
 `;
 
 const Search = styled.div`
-  background: #111111;
+  background: #3399ff;
   border-radius: 0.5rem;
   border: bold;
   color: #ffffff;
@@ -46,6 +46,15 @@ const InputSearch = styled.input`
   margin-left: 0.5rem;
 `;
 
+const Switch = styled.label`
+  border-radius: 0.5rem;
+  border: bold;
+  color: #000000;
+  font-size: 1rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+`;
+
 class App extends Component {
 
   constructor(props) {
@@ -53,6 +62,7 @@ class App extends Component {
     this.state = {
       displayList: false,
       search: '',
+      switch: 'off',
       tasks: []
     };
     this.showList = this.showList.bind(this);
@@ -72,10 +82,15 @@ class App extends Component {
   handleChange(event) { 
     const key = event.target.name;
     const value = event.target.value;
-    // (tasks, text, sortBy = 'id')
-    const tasks = this.props.filterSortTasks(this.props.tasks,value);
-    this.setState({[key]: value});
-    console.log(this.props);
+
+    if (key === 'search') {
+      // this.props.filterSortTasks(this.props.tasks, value);
+      this.setState({[key]: value});
+    } else if (key === 'switch') {
+      // const sortBy = value === 'on' ? 'id' : false;
+      // this.props.filterSortTasks(this.props.tasks, this.state.search, sortBy);
+      this.setState({[key]: (value === 'on' ? 'off' : 'on') });
+    }
 
   }
 
@@ -97,8 +112,7 @@ class App extends Component {
       .calendar();
 
     if (!loading) {
-      tasks = this.props.filterSortTasks(tasks,this.state.search).payload;
-      console.log(tasks);
+      tasks = this.props.filterSortTasks(tasks,this.state.search,this.state.switch).payload;
     }
 
     return (
@@ -107,11 +121,22 @@ class App extends Component {
         {error && error}
         <Container>
           <Guidelines />
+
+          
+
           <Button onClick={this.showList}>{display}</Button>
+
+          <Switch>
+            <label >
+              Sort by Id
+              <input type="checkbox" name='switch' value={this.state.switch} onChange={this.handleChange} />
+              <span ></span>
+            </label> 
+          </Switch>
 
           <Search>
             <label>
-              Search and Sort
+              Search
               <InputSearch type="text" name='search' value={this.state.search} onChange={this.handleChange} />
             </label>
           </Search>
