@@ -5,7 +5,9 @@ const initialState = {
   loading: false,
   error: null,
   text: "",
-  sortBy: "amount"
+  sortBy: "on",
+  reformat: false,
+  display: true,
 };
 
 export const tasks = (state = initialState, action) => {

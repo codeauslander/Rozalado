@@ -8,6 +8,8 @@ const StyledTask = styled.li`
 	padding: 1rem;
 `;
 
-export default ({ id, item }) => {
-  return <StyledTask> ({id}) {item} </StyledTask>;
+
+export default ({ id, item, reformat}) => {
+  const style = reformat ? {color:'#6600cc'} : {};
+  return <StyledTask style={style}> ({id}) {item} </StyledTask>;
 }

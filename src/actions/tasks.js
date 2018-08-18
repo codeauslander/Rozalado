@@ -1,19 +1,21 @@
-import uuid from "uuid";
+// import uuid from "uuid";
 import axios from 'axios';
 
 const tasksUrl = "https://us-central1-routecandidates.cloudfunctions.net/tasks";
 
-export const fetchTasks = () => async dispatch => {
+export const fetchTasks = () => (dispatch) => {
   dispatch({
     type: 'FETCH_TASKS'
   });
-
-  let response = await axios.get(tasksUrl);
-  if (response.status === 200) {
-    return dispatch(fetchTasksSuccess(response.data));
-  } else {
-    return dispatch(fetchTasksFail(response.error));
-  }
+  
+  return fetch(tasksUrl)
+  .then((response) => response.json())
+  .then((data) => {
+    return dispatch(fetchTasksSuccess(data));
+  })
+  .catch((error) => {
+    return dispatch(fetchTasksFail(error));
+  })
 };
 
 export const fetchTasksSuccess = tasks => ({
@@ -44,20 +46,18 @@ export const filterSortTasks =  (tasks, text, sortBy) => (dispatch) => {
       return textMatch;
     }).sort((a, b) => {
       if (sortBy === 'on') {
-         console.log(sortBy);
         return a._id > b._id ? -1 : 1;
       } else {
-         console.log(sortBy);
         return a._id < b._id ? -1 : 1;
       }
     });
 
-  return dispatch(setTextFilter(list));
+  return dispatch(filterSortSuccess(list));
 };
 
 
-export const setTextFilter = (tasks) => ({
-  type: "SET_TEXT_FILTER",
+export const filterSortSuccess = (tasks) => ({
+  type: "FILTER_SORT_SUCCESS",
   payload: tasks
 });
 

@@ -60,10 +60,11 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayList: false,
+      displayList: true,
       search: '',
       switch: 'off',
-      tasks: []
+      tasks: [],
+      reformat: false,
     };
     this.showList = this.showList.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -81,15 +82,24 @@ class App extends Component {
 
   handleChange(event) { 
     const key = event.target.name;
-    const value = event.target.value;
-
-    if (key === 'search') {
-      // this.props.filterSortTasks(this.props.tasks, value);
-      this.setState({[key]: value});
-    } else if (key === 'switch') {
-      // const sortBy = value === 'on' ? 'id' : false;
-      // this.props.filterSortTasks(this.props.tasks, this.state.search, sortBy);
-      this.setState({[key]: (value === 'on' ? 'off' : 'on') });
+    let value = event.target.value;
+    switch (key) {
+      case 'search':
+        this.setState({[key]: value});
+        break;
+      case 'switch':
+        // const sortBy = value === 'on' ? 'id' : false;
+        // this.props.filterSortTasks(this.props.tasks, this.state.search, sortBy);
+        this.setState({[key]: (value === 'on' ? 'off' : 'on') });
+          break;
+      case 'displayList':
+        this.setState({[key]: !this.state.displayList});
+        break;
+      case 'reformat':
+        this.setState({[key]: !this.state.reformat});
+        break;
+      default:
+        console.log('handleChange default');
     }
 
   }
@@ -99,8 +109,8 @@ class App extends Component {
   render() {
     let { tasks = [], loading, error } = this.props;
 
-    const show = !this.state.displayList;
-    const display = this.state.displayList ? 'Tasks : show' : 'Tasks : hide';
+    const display = this.state.displayList ? 'hide' : 'show';
+    const reformat = this.state.reformat ? 'no' : 'yes';
 
     const name = "Cesar Catano";
     const github = "@codeauslander";
@@ -117,14 +127,13 @@ class App extends Component {
 
     return (
       <React.Fragment>
-        <Header title={title} date={date} github={github} url={url} />
+        <Header title={title} date={date} github={github} url={url} reformat={this.state.reformat}/>
         {error && error}
         <Container>
           <Guidelines />
 
-          
-
-          <Button onClick={this.showList}>{display}</Button>
+          <Button name='displayList' value={this.state.displayList} onClick={this.handleChange}>Tasks - {display}</Button>
+          <Button name='reformat' value={this.state.reformat} onClick={this.handleChange}>Reformat - {reformat} </Button>
 
           <Switch>
             <label >
@@ -142,7 +151,7 @@ class App extends Component {
           </Search>
           
 
-          {show && <Tasks items={tasks}/>}
+          {this.state.displayList && <Tasks items={tasks} reformat={this.state.reformat}/>}
         </Container>
       </React.Fragment>
     );

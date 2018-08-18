@@ -3,11 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Task from './Task';
 
-const Container = styled.main`
-  margin: 1rem;
-`;
-
-export default ({ items }) => {
+export default ({ items, reformat }) => {
   return <ul>{items.map(task => {
       
       const plain = JSON.stringify(task);
@@ -24,7 +20,7 @@ export default ({ items }) => {
       }
 
       return (
-        <Task key={task._id} id={task._id} item={item}/>
+        <Task key={task._id} id={task._id} item={item} reformat={reformat}/>
       );
     })}</ul>;
 };
