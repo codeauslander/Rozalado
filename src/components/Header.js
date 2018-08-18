@@ -33,11 +33,12 @@ const StyleUrl = styled.a`
 
 const placeholder = moment().format("MMM Do YY");
 
-export default ({ title, date, github, url }) => (
-  <StyledHeader>
-    <StyledTitle>
-      {title} <StyleUrl href={url}>{url}</StyleUrl>
+export default ({ title, date, github, url, reformat }) => {
+  const style = reformat ? {color:'#6600cc'} : {};
+  return <StyledHeader >
+    <StyledTitle style={style} >
+      {title} <StyleUrl  href={url}>{url}</StyleUrl>
     </StyledTitle>
     <StyledDate>{date || placeholder}</StyledDate>
-  </StyledHeader>
-);
+  </StyledHeader>;
+};
